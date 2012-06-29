@@ -3,13 +3,6 @@ CacheCore
 
 Simple cache backends, inspired by werkzeug.contrib.cache.
 
-Supports: 
-
-- In-Memory
-- Redis
-- Memcache
-- Filesystem
-- Your own (extend BaseCache)
 
 Creating a Cache Object
 -----------------------
@@ -25,6 +18,16 @@ with that object::
     'value'
     >>> c.get("missing") is None
     True
+
+
+Cache Types
+-----------
+
+- In-Memory
+- Redis
+- Memcache
+- Filesystem
+- Your own (extend BaseCache)
 
 
 Installation
