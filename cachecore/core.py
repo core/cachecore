@@ -6,54 +6,54 @@ cachecore
 Simple cache backends, inspired by werkzeug.contrib.cache.
 
 The main problem with dynamic Web sites is, well, they're dynamic.  Each
-    time a user requests a page, the webserver executes a lot of code, queries
-    the database, renders templates until the visitor gets the page he sees.
+time a user requests a page, the webserver executes a lot of code, queries
+the database, renders templates until the visitor gets the page he sees.
 
-    This is a lot more expensive than just loading a file from the file system
-    and sending it to the visitor.
+This is a lot more expensive than just loading a file from the file system
+and sending it to the visitor.
 
-    For most Web applications, this overhead isn't a big deal but once it
-    becomes, you will be glad to have a cache system in place.
+For most Web applications, this overhead isn't a big deal but once it
+becomes, you will be glad to have a cache system in place.
 
-    How Caching Works
-    =================
+How Caching Works
+=================
 
-    Caching is pretty simple.  Basically you have a cache object lurking around
-    somewhere that is connected to a remote cache or the file system or
-    something else.  When the request comes in you check if the current page
-    is already in the cache and if so, you're returning it from the cache.
-    Otherwise you generate the page and put it into the cache. (Or a fragment
-    of the page, you don't have to cache the full thing)
+Caching is pretty simple.  Basically you have a cache object lurking around
+somewhere that is connected to a remote cache or the file system or
+something else.  When the request comes in you check if the current page
+is already in the cache and if so, you're returning it from the cache.
+Otherwise you generate the page and put it into the cache. (Or a fragment
+of the page, you don't have to cache the full thing)
 
-    Here is a simple example of how to cache a sidebar for a template::
+Here is a simple example of how to cache a sidebar for a template::
 
-        def get_sidebar(user):
-            identifier = 'sidebar_for/user%d' % user.id
-            value = cache.get(identifier)
-            if value is not None:
-                return value
-            value = generate_sidebar_for(user=user)
-            cache.set(identifier, value, timeout=60 * 5)
+    def get_sidebar(user):
+        identifier = 'sidebar_for/user%d' % user.id
+        value = cache.get(identifier)
+        if value is not None:
             return value
+        value = generate_sidebar_for(user=user)
+        cache.set(identifier, value, timeout=60 * 5)
+        return value
 
-    Creating a Cache Object
-    =======================
+Creating a Cache Object
+=======================
 
-    To create a cache object you just import the cache system of your choice
-    from the cache module and instantiate it.  Then you can start working
-    with that object:
+To create a cache object you just import the cache system of your choice
+from the cache module and instantiate it.  Then you can start working
+with that object:
 
-    >>> from CacheCore import SimpleCache
-    >>> c = SimpleCache()
-    >>> c.set("foo", "value")
-    >>> c.get("foo")
-    'value'
-    >>> c.get("missing") is None
-    True
+>>> from cachecore import SimpleCache
+>>> c = SimpleCache()
+>>> c.set("foo", "value")
+>>> c.get("foo")
+'value'
+>>> c.get("missing") is None
+True
 
-    Please keep in mind that you have to create the cache and put it somewhere
-    you have access to it (either as a module global you can import or you just
-    put it into your WSGI application).
+Please keep in mind that you have to create the cache and put it somewhere
+you have access to it (either as a module global you can import or you just
+put it into your WSGI application).
 """
 
 import os
