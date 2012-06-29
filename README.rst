@@ -3,6 +3,13 @@ CacheCore
 
 Simple cache backends, inspired by werkzeug.contrib.cache.
 
+Supports: 
+
+- In-Memory
+- Redis
+- Memcache
+- Filesystem
+- Your own (extend BaseCache)
 
 Creating a Cache Object
 -----------------------
