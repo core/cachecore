@@ -1,13 +1,6 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""
-    werkzeug.testsuite.cache
-    ~~~~~~~~~~~~~~~~~~~~~~~~
 
-    Tests the cache system
-
-    :copyright: (c) 2011 by Armin Ronacher.
-    :license: BSD, see LICENSE for more details.
-"""
 import os
 import time
 import unittest
