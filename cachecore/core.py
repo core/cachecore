@@ -59,6 +59,7 @@ put it into your WSGI application).
 import os
 import re
 import tempfile
+from collections import MutableMapping
 try:
     from hashlib import md5
 except ImportError:
@@ -89,7 +90,7 @@ def _items(mappingorseq):
         else mappingorseq
 
 
-class BaseCache(object):
+class BaseCache(MutableMapping):
     """Baseclass for the cache systems.  All the cache systems implement this
     API or a superset of it.
 
@@ -98,7 +99,14 @@ class BaseCache(object):
     """
 
     def __init__(self, default_timeout=300):
+        super(BaseCache, self).__init__()
         self.default_timeout = default_timeout
+
+    def __iter__(self):
+        raise StopIteration
+
+    def __len__(self):
+        raise NotImplementedError
 
     def get(self, key):
         """Looks up key in the cache and returns the value for it.
@@ -108,6 +116,9 @@ class BaseCache(object):
         """
         return None
 
+    def __getitem__(self, key):
+        return self.get(key)
+
     def delete(self, key):
         """Deletes `key` from the cache.  If it does not exist in the cache
         nothing happens.
@@ -115,6 +126,9 @@ class BaseCache(object):
         :param key: the key to delete.
         """
         pass
+
+    def __delitem__(self, key):
+        return self.delete(key)
 
     def get_many(self, *keys):
         """Returns a list of values for the given keys.
@@ -152,6 +166,9 @@ class BaseCache(object):
                         it uses the default timeout).
         """
         pass
+
+    def __setitem__(self, key, value):
+        return self.set(key, value)
 
     def add(self, key, value, timeout=None):
         """Works like :meth:`set` but does not overwrite the values of already
