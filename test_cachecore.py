@@ -6,6 +6,7 @@ import time
 import unittest
 import tempfile
 import shutil
+import collections
 
 from unittest import TestCase
 import cachecore as cache
@@ -76,6 +77,27 @@ class FileSystemCacheTestCase(TestCase):
         cache_files = os.listdir(tmp_dir)
         assert len(cache_files) == 0
         shutil.rmtree(tmp_dir)
+
+
+class MappingTestCase(TestCase):
+    def test_should_have_MutableMapping_methods_and_inherit_from_it(self):
+        self.assertIn(collections.MutableMapping, cache.BaseCache.mro())
+        my_cache = cache.BaseCache()
+        expected_methods = ['setitem', 'getitem', 'delitem', 'iter', 'len']
+        actual_methods = dir(my_cache)
+        for method in expected_methods:
+            self.assertIn('__{}__'.format(method), actual_methods)
+
+    def test_should_be_able_to_use_it_as_a_dict(self):
+        my_cache = cache.SimpleCache()
+        my_cache['python'] = 'rules'
+        my_cache.set('answer', '42')
+        self.assertEquals(my_cache.get('python'), 'rules')
+        self.assertEquals(my_cache['answer'], '42')
+        del my_cache['python']
+        my_cache.delete('answer')
+        self.assertEquals(my_cache['python'], None)
+        self.assertEquals(my_cache['answer'], None)
 
 
 # class RedisCacheTestCase(TestCase):
